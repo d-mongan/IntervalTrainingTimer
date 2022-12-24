@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react';
 import IntervalItem from './Components/IntervalItem';
 import InputIntervalItem from './Components/InputIntervalItem';
 import { useNavigation } from '@react-navigation/native';
-import { colorPicker } from './colorPicker'
+import { saveData, loadData } from './Components/Storage';
 
 
 function IntervalScreen({route, navigation}) {
@@ -165,17 +165,26 @@ function IntervalScreen({route, navigation}) {
         
         <View style = {styles.appContainer}>
             <View style = {styles.titleBar}>
+            <Text style={{fontSize: 35, color: '#2D2A32', width: '90%'}}>{name}</Text>
+            </View>
+            <View style = {styles.playBar}>
+            <TouchableOpacity onPress={navigation.goBack}>
+            <Image
+                source={require('./assets/Back.png')}
+                style={{ width: 60, height: 60 }}
+                />
+            </TouchableOpacity>
             <TouchableOpacity onPress={addTimerHandler}>
                 <Image
                 source={require('./assets/Add.png')}
-                style={{ width: 80, height: 80 }}
+                style={{ width: 60, height: 60 }}
                 />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={startTimer}>
                 <Image
                 source={require('./assets/Play.png')}
-                style={{ width: 80, height: 80 }}
+                style={{ width: 60, height: 60 }}
                 />
             </TouchableOpacity>
             
@@ -262,15 +271,25 @@ const styles = StyleSheet.create({
       paddingTop: 50,
       paddingHorizontal:16,
       flex: 1,
+      
     },
     titleBar: {
+      flex: 0.5,
+      flexDirection: 'row',
+      marginBottom: 8,
+      borderBottomColor: '#cccccc',
+      borderBottomWidth: 1,
+      paddingBottom: 8,
+    },
+    playBar: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignItems: 'center',
         marginBottom: 24,
         borderBottomColor: '#cccccc',
         borderBottomWidth: 1,
-        flex: 1,
+        paddingBottom: 8,
+        flex: 0.75,
     },
     timersContainer: {
       flex: 6,

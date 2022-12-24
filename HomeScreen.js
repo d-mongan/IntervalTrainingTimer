@@ -1,18 +1,25 @@
-import { Button, StyleSheet, Text, TextInput, View, FlatList, Alert } from 'react-native';
+import { StyleSheet, View, FlatList, Alert } from 'react-native';
 import { useState } from 'react';
 import Item from './Components/Item';
 import Input from './Components/Input';
+import { saveData, loadData } from './Components/Storage';
 import { useNavigation } from '@react-navigation/native';
 
 function HomeScreen({navigation}) {
-    //const navigation = useNavigation();
-    const [IntervalTimers, setIntervalTimers] = useState([])
+    
+  const [IntervalTimers, setIntervalTimers] = useState([])
+  //check if IntervalTimers already exists and grab it from local storage
+  const storedTimers = loadData('IntervalTimers');
+      if (storedTimers) {
+        setIntervalTimers(storedTimers);
+      }
 
   
   function addTimerHandler(enteredText){
     setIntervalTimers((IntervalTimers)=>
     [...IntervalTimers, 
       {name: enteredText, id: Math.random().toString(), intervals: []}]);
+    saveData('IntervalTimers', IntervalTimers);
   }
 
   function removeTimerHandler(id){

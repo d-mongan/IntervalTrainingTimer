@@ -1,4 +1,4 @@
-import {StyleSheet,View, TextInput, Button} from 'react-native'
+import {StyleSheet,View, TextInput, TouchableOpacity, Image} from 'react-native'
 import { useState } from 'react';
 
 function Input(props) {
@@ -21,11 +21,12 @@ return (
             value={enteredTimerText}
           />
 
-      <Button 
-          title='Add Timer'
-          onPress={addTimerHandler}
-          style={styles.button}
-           />
+        <TouchableOpacity onPress={addTimerHandler}>
+                <Image
+                source={require('../assets/Add.png')}
+                style={{ width: 60, height: 60 }}
+                />
+        </TouchableOpacity>
      </View>
 ); 
 };
