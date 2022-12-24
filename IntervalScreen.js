@@ -3,9 +3,16 @@ import { useState, useCallback } from 'react';
 import IntervalItem from './Components/IntervalItem';
 import InputIntervalItem from './Components/InputIntervalItem';
 import { useNavigation } from '@react-navigation/native';
+import { colorPicker } from './colorPicker'
 
 
 function IntervalScreen({route, navigation}) {
+
+
+  
+  const [colorModalVisible, setColorModalVisible] = useState(false);
+  const availableColors = ['red', 'orange', 'yellow', 'green', 'blue'];
+  
 
     
     const [, updateState] = useState();
@@ -28,7 +35,7 @@ function IntervalScreen({route, navigation}) {
     const [intervalMinutes, setIntervalMinutes] = useState('');
     const [intervalSeconds, setIntervalSeconds] = useState('');
     const [intervalDuration, setIntervalDuration] = useState('');
-    const [intervalColor, setIntervalColor] = useState('');
+    const [intervalColor, setIntervalColor] = useState('red');
     const [intervalSound, setIntervalSound] = useState('');
     const [intervalID, setIntervalID] = useState('');
 
@@ -87,7 +94,7 @@ function IntervalScreen({route, navigation}) {
         setIntervalMinutes('')
         setIntervalSeconds('')
         setIntervalDuration('')
-        setIntervalColor('')
+        setIntervalColor('red')
         setIntervalSound('')
         setIntervalID('')
     }
@@ -144,6 +151,18 @@ function IntervalScreen({route, navigation}) {
         //start the interval timer
 
       }
+
+      function renderColorItem({ item }) {
+        return (
+          <TouchableOpacity
+            style={{ backgroundColor: item, width: 40, height: 40 }}
+            onPress={() => {
+              setIntervalColor(item);
+              setColorModalVisible(false);
+            }}
+          />
+        );
+      }
     
       return (
         
@@ -176,6 +195,7 @@ function IntervalScreen({route, navigation}) {
                       id = {itemData.item.intervalID}
                       description = {itemData.item.intervalDescription}
                       duration = {itemData.item.intervalDuration}
+                      color = {itemData.item.intervalColor}
                       sound = {itemData.item.intervalSound}
                       intervals = {itemData.item.intervals}
                       />
@@ -209,6 +229,20 @@ function IntervalScreen({route, navigation}) {
                                 }}
                                 style={{ width: 50, height: 50, fontSize:30,  }}></TextInput>
                             </View>
+                            <TouchableOpacity
+                                style={{ backgroundColor: intervalColor, width: 40, height: 40 }}
+                                onPress={() => setColorModalVisible(true)}
+                              />
+                              <Modal visible={colorModalVisible}>
+                              
+                                <FlatList
+                                  data={availableColors}
+                                  renderItem={renderColorItem}
+                                  keyExtractor={item => item}
+                                  horizontal
+                                />
+                                
+                              </Modal>
 
                         <Button title="Save" onPress={saveNewItem} />
 
@@ -254,4 +288,5 @@ const styles = StyleSheet.create({
     modalContainer:{
 
     },
+    
   }); 
