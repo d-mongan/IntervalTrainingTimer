@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, TextInput, View, FlatList, Modal, TouchableOpacity, Image, Alert} from 'react-native';
+import { Button, StyleSheet, Text, TextInput, View, FlatList, Modal, TouchableOpacity, Image, Alert, ScrollView} from 'react-native';
 import { useState, useCallback } from 'react';
 import IntervalItem from './Components/IntervalItem';
 import InputIntervalItem from './Components/InputIntervalItem';
@@ -9,9 +9,8 @@ import { colorPicker } from './colorPicker'
 function IntervalScreen({route, navigation}) {
 
 
-  
-  const [colorModalVisible, setColorModalVisible] = useState(false);
-  const availableColors = ['red', 'orange', 'yellow', 'green', 'blue'];
+  const [colorPickerVisible, setColorPickerVisible] = useState(false);
+  const Colors = ['red', 'orange', 'yellow', 'green', 'blue'];
   
 
     
@@ -152,17 +151,15 @@ function IntervalScreen({route, navigation}) {
 
       }
 
-      function renderColorItem({ item }) {
-        return (
-          <TouchableOpacity
-            style={{ backgroundColor: item, width: 40, height: 40 }}
-            onPress={() => {
-              setIntervalColor(item);
-              setColorModalVisible(false);
-            }}
-          />
-        );
+      function toggleColorPicker() {
+        setColorPickerVisible(!colorPickerVisible);
       }
+    
+      function selectColor(color) {
+        setIntervalColor(color);
+        toggleColorPicker();
+      }
+    
     
       return (
         
@@ -211,7 +208,7 @@ function IntervalScreen({route, navigation}) {
                         <TextInput value={intervalDescription} onChangeText={(text) => setIntervalDescription(text)} />
                         <Text>Duration:</Text>
                             <View style ={styles.timer}>
-                                <TextInput maxLength={2} keyboardType="number-pad" defaultValue='' placeholder='00' 
+                                <TextInput maxLength={2} keyboardType="number-pad" defaultValue={intervalMinutes} placeholder='00' 
                                     onChangeText={(text) => {
                                         if (/^\d+$/.test(text) && Number(text) <= 59) {
                                             setIntervalMinutes(text);
@@ -221,7 +218,7 @@ function IntervalScreen({route, navigation}) {
 
                                 <Text style={{fontSize: 50, color: '#2D2A32', width: 30, paddingBottom:10}}>:</Text>
                 
-                                <TextInput maxLength={2} keyboardType="number-pad" defaultValue='' placeholder='00' 
+                                <TextInput maxLength={2} keyboardType="number-pad" defaultValue={intervalSeconds}  placeholder='00' 
                                 onChangeText={(text) => {
                                         if (/^\d+$/.test(text) && Number(text) <= 59) {
                                             setIntervalSeconds(text);
@@ -229,20 +226,22 @@ function IntervalScreen({route, navigation}) {
                                 }}
                                 style={{ width: 50, height: 50, fontSize:30,  }}></TextInput>
                             </View>
-                            <TouchableOpacity
-                                style={{ backgroundColor: intervalColor, width: 40, height: 40 }}
-                                onPress={() => setColorModalVisible(true)}
-                              />
-                              <Modal visible={colorModalVisible}>
-                              
-                                <FlatList
-                                  data={availableColors}
-                                  renderItem={renderColorItem}
-                                  keyExtractor={item => item}
-                                  horizontal
-                                />
-                                
-                              </Modal>
+                            <View>
+                              <TouchableOpacity onPress={toggleColorPicker}>
+                                <View style={[styles.colorBox, { backgroundColor: intervalColor }]} />
+                              </TouchableOpacity>
+                              {colorPickerVisible && (
+                                <View style={styles.colorPicker}>
+                                  <ScrollView horizontal>
+                                    {Colors.map(color => (
+                                      <TouchableOpacity key={color} onPress={() => selectColor(color)}>
+                                        <View style={[styles.colorBox, { backgroundColor: color }]} />
+                                      </TouchableOpacity>
+                                    ))}
+                                  </ScrollView>
+                                </View>
+                              )}
+                            </View>
 
                         <Button title="Save" onPress={saveNewItem} />
 
@@ -287,6 +286,19 @@ const styles = StyleSheet.create({
     },
     modalContainer:{
 
+    },
+    colorBox: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+      marginRight: 5,
+    },
+    colorPicker: {
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      backgroundColor: 'white',
     },
     
   }); 
