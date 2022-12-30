@@ -15,12 +15,15 @@ export default Item;
 const styles = StyleSheet.create({
 
     listItem: {
-        padding: 2,
-        margin: 2,
-        borderBottomWidth: 1,
-        borderColor: '#cccccc',
-        backgroundColor: '#cccccc',
-        borderRadius: 8,
+        color: '#2D2A32',
+        fontSize: 20,
+        padding: 10,
+        paddingLeft: 20,
+        margin: 6,
+        borderWidth: 1,
+        borderColor: '#BE97C6',
+        backgroundColor: '#EFE5F1',
+        borderRadius: 70,
       },
 
 })

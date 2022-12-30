@@ -1,5 +1,5 @@
 import { StyleSheet, View, FlatList, Alert } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Item from './Components/Item';
 import Input from './Components/Input';
 import { saveData, loadData } from './Components/Storage';
@@ -9,17 +9,26 @@ function HomeScreen({navigation}) {
     
   const [IntervalTimers, setIntervalTimers] = useState([])
   //check if IntervalTimers already exists and grab it from local storage
-  const storedTimers = loadData('IntervalTimers');
-      if (storedTimers) {
-        setIntervalTimers(storedTimers);
-      }
+  const loadIntervalTimers = async () => {
+    const data = await loadData('IntervalTimers');
+    if (data !== 'error'){
+      setIntervalTimers(data);
+    }
+    
+  }
+  useEffect(() => {
+    loadIntervalTimers();
+  }, []);
 
   
   function addTimerHandler(enteredText){
+    let randID = Math.random().toString()
     setIntervalTimers((IntervalTimers)=>
     [...IntervalTimers, 
-      {name: enteredText, id: Math.random().toString(), intervals: []}]);
-    saveData('IntervalTimers', IntervalTimers);
+      {name: enteredText, id: randID, intervals: []}]);
+
+    saveData('IntervalTimers', [...IntervalTimers, 
+      {name: enteredText, id: randID, intervals: []}]);
   }
 
   function removeTimerHandler(id){
@@ -34,6 +43,7 @@ function HomeScreen({navigation}) {
               style: 'cancel',
             },
             {text: 'OK', onPress: () => setIntervalTimers(IntervalTimers=>{
+                saveData('IntervalTimers', IntervalTimers.filter((timer) => timer.id !== id));
                 return IntervalTimers.filter((timer) => timer.id !== id);
             })},
           ],
@@ -64,6 +74,7 @@ function HomeScreen({navigation}) {
                   name = {itemData.item.name}
                   id = {itemData.item.id}
                   intervals = {itemData.item.intervals}
+                  style = {styles.timerItem}
                   />
      }} />
      
@@ -93,7 +104,7 @@ const styles = StyleSheet.create({
   textInput: {
     borderWidth: 1,
     borderColor: '#cccccc',
-    width: '70%',
+    width: '70%', 
     marginRight: 8,
     padding: 8,
   },

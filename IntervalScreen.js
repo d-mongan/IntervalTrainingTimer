@@ -25,18 +25,18 @@ function IntervalScreen({route, navigation}) {
     //grab the name, id and the array which holds the different intervals for this timer
     const name = intervalsObject.name;
     const id = intervalsObject.id;
-    //const [intervalTimerItem,setIntervalTimerItem] = useState(intervals);
 
     //variables for adding new intervals to the timer
     const [modalVisible, setModalVisible] = useState(false);
     const [intervalName, setIntervalName] = useState('');
     const [intervalDescription, setIntervalDescription] = useState('');
-    const [intervalMinutes, setIntervalMinutes] = useState('');
-    const [intervalSeconds, setIntervalSeconds] = useState('');
+    const [intervalMinutes, setIntervalMinutes] = useState(0);
+    const [intervalSeconds, setIntervalSeconds] = useState(0);
     const [intervalDuration, setIntervalDuration] = useState('');
     const [intervalColor, setIntervalColor] = useState('red');
     const [intervalSound, setIntervalSound] = useState('');
     const [intervalID, setIntervalID] = useState('');
+    const [isRunning, setIsRunning] = useState(false);
 
     function addTimerHandler(){
         //pop-up allowing user to write name, description, length, colour and completion sound
@@ -55,6 +55,7 @@ function IntervalScreen({route, navigation}) {
       
         setIntervals(updatedIntervals);
         intervalsObject.intervals = updatedIntervals;
+        saveData('IntervalTimers', IntervalTimers);
       }
 
     function saveNewItem() {
@@ -65,11 +66,13 @@ function IntervalScreen({route, navigation}) {
                 intervalDescription, 
                 intervalMinutes, 
                 intervalSeconds, 
-                intervalDuration, 
+                intervalDuration: (intervalMinutes*60)+intervalSeconds, 
                 intervalColor, 
-                intervalSound
+                intervalSound,
+                isRunning,
             };
             intervals.push(newItem);
+            saveData('IntervalTimers', IntervalTimers);
         } else {
             const existingItem = { 
                 intervalID,
@@ -77,25 +80,26 @@ function IntervalScreen({route, navigation}) {
                 intervalDescription, 
                 intervalMinutes, 
                 intervalSeconds, 
-                intervalDuration, 
+                intervalDuration: (intervalMinutes*60)+intervalSeconds, 
                 intervalColor, 
-                intervalSound
+                intervalSound,
+                isRunning,
             };
             updateExistingItem(intervalID, existingItem);
-            console.log(intervalID)
-            console.log(existingItem)
+            saveData('IntervalTimers', IntervalTimers);
         }
 
         //reset variables used in the popup
         setModalVisible(false)
         setIntervalName('')
         setIntervalDescription('')
-        setIntervalMinutes('')
-        setIntervalSeconds('')
+        setIntervalMinutes(0)
+        setIntervalSeconds(0)
         setIntervalDuration('')
         setIntervalColor('red')
         setIntervalSound('')
         setIntervalID('')
+        setIsRunning(false)
     }
 
     function saveExistingItem(id) {
@@ -120,6 +124,7 @@ function IntervalScreen({route, navigation}) {
                     //setIntervals(intervals.splice(index, 1));
                     setIntervals(intervals.filter((interval) => interval.intervalID !== id))
                     intervalsObject.intervals = intervals.filter((interval) => interval.intervalID !== id);
+                    saveData('IntervalTimers', IntervalTimers);
                 }
                 },
               ],
@@ -133,7 +138,7 @@ function IntervalScreen({route, navigation}) {
         //const interval = intervalTimerItem.find((timer) => timer.id === id);
         //popup a window with the same options as the create window but filled in with the details so the user can edit them
         const item = intervals.find((interval) => interval.intervalID === id);
-        console.log(item)
+        
         setIntervalName(item.intervalName)
         setIntervalDescription(item.intervalDescription)
         setIntervalMinutes(item.intervalMinutes)
@@ -148,7 +153,7 @@ function IntervalScreen({route, navigation}) {
 
       function startTimer() {
         //start the interval timer
-
+        navigation.navigate('Timer', { intervals: intervals});
       }
 
       function toggleColorPicker() {
@@ -165,7 +170,7 @@ function IntervalScreen({route, navigation}) {
         
         <View style = {styles.appContainer}>
             <View style = {styles.titleBar}>
-            <Text style={{fontSize: 35, color: '#2D2A32', width: '90%'}}>{name}</Text>
+            <Text style={{fontSize: 35, color: '#2D2A32', width: '90%', textAlign: 'center'}}>{name}</Text>
             </View>
             <View style = {styles.playBar}>
             <TouchableOpacity onPress={navigation.goBack}>
@@ -204,6 +209,8 @@ function IntervalScreen({route, navigation}) {
                       color = {itemData.item.intervalColor}
                       sound = {itemData.item.intervalSound}
                       intervals = {itemData.item.intervals}
+                      minutes = {itemData.item.intervalMinutes}
+                      seconds = {itemData.item.intervalSeconds}
                       />
             }} />
          
@@ -220,7 +227,7 @@ function IntervalScreen({route, navigation}) {
                                 <TextInput maxLength={2} keyboardType="number-pad" defaultValue={intervalMinutes} placeholder='00' 
                                     onChangeText={(text) => {
                                         if (/^\d+$/.test(text) && Number(text) <= 59) {
-                                            setIntervalMinutes(text);
+                                            setIntervalMinutes(Number(text));
                                         }
                                     }}
                                 style={{ width: 50, height: 50, fontSize:30 }}></TextInput>
@@ -230,7 +237,7 @@ function IntervalScreen({route, navigation}) {
                                 <TextInput maxLength={2} keyboardType="number-pad" defaultValue={intervalSeconds}  placeholder='00' 
                                 onChangeText={(text) => {
                                         if (/^\d+$/.test(text) && Number(text) <= 59) {
-                                            setIntervalSeconds(text);
+                                            setIntervalSeconds(Number(text));
                                         }
                                 }}
                                 style={{ width: 50, height: 50, fontSize:30,  }}></TextInput>
@@ -280,6 +287,7 @@ const styles = StyleSheet.create({
       borderBottomColor: '#cccccc',
       borderBottomWidth: 1,
       paddingBottom: 8,
+      
     },
     playBar: {
         flexDirection: 'row',
