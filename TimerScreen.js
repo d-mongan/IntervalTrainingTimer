@@ -26,7 +26,6 @@ function TimerScreen({route, navigation}) {
     const timers = route.params.intervals;
     const [currentTimerIndex, setCurrentTimerIndex] = useState(0);
     const timer = timers[currentTimerIndex];
-    console.log(timers)
     //const [isRunning, setIsRunning] = useState(false);
 
     //constant to change pause and play
@@ -48,12 +47,25 @@ function TimerScreen({route, navigation}) {
     };
 
     function handleTimerFinish(id) {
-        const nextTimerIndex = timers.findIndex(timer => timer.id === id) + 1;
+        //const nextTimerIndex = timers.findIndex(timer => timer.id === id) + 1;
+        console.log(timers.length)
+        const timer = timers[currentTimerIndex];
+        timer.isRunning = false;
+        const nextTimerIndex = currentTimerIndex+1;
+        
         if (nextTimerIndex < timers.length) {
-          setCurrentTimerIndex(nextTimerIndex);
-          const timer = timers[nextTimerIndex];
-          timer.isRunning = true;
+            setCurrentTimerIndex(nextTimerIndex);
+            const timer = timers[nextTimerIndex];
+            console.log(timer)
+            timer.isRunning = true;
+            forceUpdate();
+            console.log(nextTimerIndex)
+            console.log(timers[nextTimerIndex])
+            
+            
         } else {
+            //code to play alert and then call a goBack function that resets variables, back button should also call that function
+
           /*Sound.createAsync(
             {
               uri:
@@ -71,7 +83,7 @@ function TimerScreen({route, navigation}) {
         const timer = timers[currentTimerIndex];
         timer.isRunning = false;
         forceUpdate();
-        console.log(timers[currentTimerIndex])
+        
     
       }
     
@@ -80,7 +92,7 @@ function TimerScreen({route, navigation}) {
         const timer = timers[currentTimerIndex];
         timer.isRunning = true;
         forceUpdate();
-        console.log(timers[currentTimerIndex])
+        
       }
 
 
@@ -93,7 +105,7 @@ function TimerScreen({route, navigation}) {
             <View style = {styles.timer}>
         
             <Timer
-                id={currentTimerIndex}
+                id={timer.intervalID}
                 duration={timer.intervalDuration}
                 name={timer.intervalName}
                 description={timer.intervalDescription}

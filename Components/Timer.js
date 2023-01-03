@@ -2,15 +2,6 @@ import { useState, useEffect, React, useCallback } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
 
-/*function start() {
-    this.isRunning = true;
-    this.forceUpdate();
-  }
-  function stop() {
-    this.isRunning = false;
-    this.forceUpdate();
-  }*/
-
 
     export function Timer(props) {
   
@@ -19,33 +10,47 @@ import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
         const [seconds, setCurrentSeconds] = useState((currentDuration % 60).toString().padStart(2, '0'));
         const ID = props.id;
         const [isRunning, setIsRunning] = useState(props.isRunning);
-        //const [, updateState] = useState();
-        //const forceUpdate = useCallback(() => updateState({}), []);
+        const [, updateState] = useState();
+        const forceUpdate = useCallback(() => updateState({}), []);
 
   
 
   function updateDuration() {
+    if (currentDuration < 0) {
+    
+      clearInterval(intervalId);
+      props.onFinish(ID);
+      return;
+    }
     setCurrentDuration(currentDuration => currentDuration - 1);
     setCurrentMinutes(Math.floor(currentDuration / 60).toString().padStart(2, '0'));
     setCurrentSeconds((currentDuration % 60).toString().padStart(2, '0'));
   }
+  let intervalId = null;
+  //added this to try and set the timer straight away when timer changes, untested
+  updateDuration();
 
   useEffect(() => {
-    let intervalId = null;
-    if (isRunning && currentDuration > 0) {
+    //let intervalId = null;
+    if (isRunning && currentDuration > -1) {
       intervalId = setInterval(updateDuration, 1000);
-    } else if (currentDuration > 0) {
-      
+      console.log(currentDuration);
+    } else if (isRunning && currentDuration < 0) {
+       updateDuration();
     } else {
-        clearInterval(intervalId);
-        props.onFinish(ID);
+         
     }
+      
     return () => clearInterval(intervalId);
   }, [isRunning, currentDuration]);
 
   useEffect(() => {
     setIsRunning(props.isRunning);
   }, [props.isRunning]);
+
+  useEffect(() => {
+    setCurrentDuration(props.duration);
+  }, [props.duration]);
 
   return (
     <View style = {timerStyles.timerBox}>
