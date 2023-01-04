@@ -30,7 +30,9 @@ function IntervalItem(props) {
             <View style = {styles.topRow}>
                 <Text style={{fontSize: 20, color: '#2D2A32'}}>{props.name}</Text>
                 <View style ={styles.duration}>
-                    <Text style={{fontSize: 20, color: '#2D2A32'}}>{props.minutes}:{props.seconds}</Text>
+                    <Text style={{fontSize: 20, color: '#2D2A32'}}>{props.minutes.toString().padStart(2, '0')}
+                    :
+                    {props.seconds.toString().padStart(2, '0')}</Text>
                 </View>
             </View>
 

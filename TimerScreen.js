@@ -27,7 +27,7 @@ function TimerScreen({route, navigation}) {
     const [currentTimerIndex, setCurrentTimerIndex] = useState(0);
     const timer = timers[currentTimerIndex];
     //const [isRunning, setIsRunning] = useState(false);
-
+    console.log(timer);
     //constant to change pause and play
     const [isImage1Displayed, setIsImage1Displayed] = useState(true);
 
@@ -45,27 +45,23 @@ function TimerScreen({route, navigation}) {
             handlePauseTimers();
         }
     };
+    
 
     function handleTimerFinish(id) {
         //const nextTimerIndex = timers.findIndex(timer => timer.id === id) + 1;
         console.log(timers.length)
         const timer = timers[currentTimerIndex];
         timer.isRunning = false;
-        const nextTimerIndex = currentTimerIndex+1;
+        let nextTimerIndex = currentTimerIndex+1;
         
         if (nextTimerIndex < timers.length) {
             setCurrentTimerIndex(nextTimerIndex);
             const timer = timers[nextTimerIndex];
-            console.log(timer)
             timer.isRunning = true;
-            forceUpdate();
-            console.log(nextTimerIndex)
-            console.log(timers[nextTimerIndex])
-            
-            
+            //forceUpdate();
         } else {
             //code to play alert and then call a goBack function that resets variables, back button should also call that function
-
+            resetTimers();
           /*Sound.createAsync(
             {
               uri:
@@ -79,12 +75,9 @@ function TimerScreen({route, navigation}) {
       }
 
       function handlePauseTimers(){
-
         const timer = timers[currentTimerIndex];
         timer.isRunning = false;
         forceUpdate();
-        
-    
       }
     
       function startTimers() {
@@ -94,6 +87,13 @@ function TimerScreen({route, navigation}) {
         forceUpdate();
         
       }
+      function resetTimers() {
+        navigation.goBack();
+        const timer = timers[currentTimerIndex];
+        timer.isRunning = false;
+        setCurrentTimerIndex(0)
+        
+    }
 
 
       return (
@@ -115,7 +115,7 @@ function TimerScreen({route, navigation}) {
                 />
             </View>
             <View style = {styles.controlBar}>
-            <TouchableOpacity onPress={navigation.goBack}>
+            <TouchableOpacity onPress={resetTimers}>
             <Image
                 source={require('./assets/Left.png')}
                 style={{ width: 60, height: 60 }}

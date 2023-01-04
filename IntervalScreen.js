@@ -224,7 +224,10 @@ function IntervalScreen({route, navigation}) {
                         <TextInput value={intervalDescription} onChangeText={(text) => setIntervalDescription(text)} />
                         <Text>Duration:</Text>
                             <View style ={styles.timer}>
-                                <TextInput maxLength={2} keyboardType="number-pad" defaultValue={intervalMinutes} placeholder='00' 
+                                <TextInput  maxLength={2} 
+                                            keyboardType="number-pad"  
+                                            value={intervalMinutes}
+                                            placeholder={intervalMinutes === 0 ? '00' : intervalMinutes.toString().padStart(2, '0')}
                                     onChangeText={(text) => {
                                         if (/^\d+$/.test(text) && Number(text) <= 59) {
                                             setIntervalMinutes(Number(text));
@@ -234,7 +237,10 @@ function IntervalScreen({route, navigation}) {
 
                                 <Text style={{fontSize: 50, color: '#2D2A32', width: 30, paddingBottom:10}}>:</Text>
                 
-                                <TextInput maxLength={2} keyboardType="number-pad" defaultValue={intervalSeconds}  placeholder='00' 
+                                <TextInput  maxLength={2} 
+                                            keyboardType="number-pad"  
+                                            value={intervalSeconds}
+                                            placeholder={intervalSeconds === 0 ? '00' : intervalSeconds.toString().padStart(2, '0')}
                                 onChangeText={(text) => {
                                         if (/^\d+$/.test(text) && Number(text) <= 59) {
                                             setIntervalSeconds(Number(text));
