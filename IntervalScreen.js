@@ -1,4 +1,5 @@
-import { Button, StyleSheet, Text, TextInput, View, FlatList, Modal, TouchableOpacity, Image, Alert, ScrollView} from 'react-native';
+import { Button, StyleSheet, Text, TextInput, View, FlatList, Modal, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
+import { Picker, PickerItem } from 'react-native-picker';
 import { useState, useCallback } from 'react';
 import IntervalItem from './Components/IntervalItem';
 import InputIntervalItem from './Components/InputIntervalItem';
@@ -8,12 +9,55 @@ import { saveData, loadData } from './Components/Storage';
 
 function IntervalScreen({route, navigation}) {
 
+  //old textinput for minutes/seconds:
+  /*<TextInput  maxLength={2} 
+                                            keyboardType="number-pad"  
+                                            value={intervalMinutes}
+                                            placeholder={intervalMinutes === 0 ? '00' : intervalMinutes.toString().padStart(2, '0')}
+                                    onChangeText={(text) => {
+                                        if (/^\d+$/.test(text) && Number(text) <= 59) {
+                                            setIntervalMinutes(Number(text));
+                                        }
+                                    }}
+                                style={{ width: 50, height: 50, fontSize:30 }}></TextInput>
 
+                                <Text style={{fontSize: 50, color: '#2D2A32', width: 30, paddingBottom:10}}>:</Text>
+                
+                                <TextInput  maxLength={2} 
+                                            keyboardType="number-pad"  
+                                            value={intervalSeconds}
+                                            placeholder={intervalSeconds === 0 ? '00' : intervalSeconds.toString().padStart(2, '0')}
+                                onChangeText={(text) => {
+                                        if (/^\d+$/.test(text) && Number(text) <= 59) {
+                                            setIntervalSeconds(Number(text));
+                                        }
+                                }}
+                                style={{ width: 50, height: 50, fontSize:30,  }}></TextInput>*/ 
+
+  //for the color picker
   const [colorPickerVisible, setColorPickerVisible] = useState(false);
   const Colors = ['red', 'orange', 'yellow', 'green', 'blue'];
   
+  //for the seconds/minutes scrollwheel
+  const secondsItems = [];
+  for (let i = 0; i < 60; i++) {
+    secondsItems.push({label: i.toString().padStart(2, '0'), value: i});
+  }
 
-    
+  const minutesItems = [];
+  for (let i = 0; i < 60; i++) {
+    minutesItems.push({label: i.toString().padStart(2, '0'), value: i});
+  }
+
+  const renderItem = ({ item }) => {
+    return (
+      <Text style={[styles.item, item.value === intervalMinutes ? styles.selected : styles.faded]}>
+        {item.label}
+      </Text>
+    );
+  };
+
+    //general arrays for the timers
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
     const { IntervalTimers, timerID } = route.params;
@@ -224,29 +268,11 @@ function IntervalScreen({route, navigation}) {
                         <TextInput value={intervalDescription} onChangeText={(text) => setIntervalDescription(text)} />
                         <Text>Duration:</Text>
                             <View style ={styles.timer}>
-                                <TextInput  maxLength={2} 
-                                            keyboardType="number-pad"  
-                                            value={intervalMinutes}
-                                            placeholder={intervalMinutes === 0 ? '00' : intervalMinutes.toString().padStart(2, '0')}
-                                    onChangeText={(text) => {
-                                        if (/^\d+$/.test(text) && Number(text) <= 59) {
-                                            setIntervalMinutes(Number(text));
-                                        }
-                                    }}
-                                style={{ width: 50, height: 50, fontSize:30 }}></TextInput>
+                            
 
-                                <Text style={{fontSize: 50, color: '#2D2A32', width: 30, paddingBottom:10}}>:</Text>
-                
-                                <TextInput  maxLength={2} 
-                                            keyboardType="number-pad"  
-                                            value={intervalSeconds}
-                                            placeholder={intervalSeconds === 0 ? '00' : intervalSeconds.toString().padStart(2, '0')}
-                                onChangeText={(text) => {
-                                        if (/^\d+$/.test(text) && Number(text) <= 59) {
-                                            setIntervalSeconds(Number(text));
-                                        }
-                                }}
-                                style={{ width: 50, height: 50, fontSize:30,  }}></TextInput>
+
+
+                            
                             </View>
                             <View>
                               <TouchableOpacity onPress={toggleColorPicker}>
@@ -315,7 +341,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
-        height: 80,
+        height: 180,
     },
     modalContainer:{
 
@@ -332,6 +358,20 @@ const styles = StyleSheet.create({
       left: 0,
       right: 0,
       backgroundColor: 'white',
+    },
+    selectedItem: {
+      fontSize: 32,
+      color: 'black',
+    },
+    unselectedItem: {
+      fontSize: 32,
+      color: 'gray',
+    },
+    item: {
+      padding: 10,
+      fontSize: 18,
+      height: 48,
+      textAlign: 'center',
     },
     
   }); 

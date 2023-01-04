@@ -57,8 +57,9 @@ function TimerScreen({route, navigation}) {
         if (nextTimerIndex < timers.length) {
             setCurrentTimerIndex(nextTimerIndex);
             const timer = timers[nextTimerIndex];
-            timer.isRunning = true;
             forceUpdate();
+            timer.isRunning = true;
+            
         } else {
             //code to play alert and then call a goBack function that resets variables, back button should also call that function
             resetTimers();
@@ -89,6 +90,7 @@ function TimerScreen({route, navigation}) {
       }
       function resetTimers() {
         navigation.goBack();
+        //maybe try adding a 1 second wait here so the first timer doesn't flash?
         const timer = timers[currentTimerIndex];
         timer.isRunning = false;
         setCurrentTimerIndex(0)

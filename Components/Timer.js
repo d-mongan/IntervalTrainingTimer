@@ -22,8 +22,6 @@ import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
     
   }
   let intervalId = null;
-  //added this to try and set the timer straight away when timer changes, untested
-  //updateDuration();
 
   useEffect(() => {
     //let intervalId = null;
