@@ -58,7 +58,7 @@ function TimerScreen({route, navigation}) {
             setCurrentTimerIndex(nextTimerIndex);
             const timer = timers[nextTimerIndex];
             timer.isRunning = true;
-            //forceUpdate();
+            forceUpdate();
         } else {
             //code to play alert and then call a goBack function that resets variables, back button should also call that function
             resetTimers();

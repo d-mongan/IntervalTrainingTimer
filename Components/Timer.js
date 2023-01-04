@@ -32,8 +32,10 @@ import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
       console.log(currentDuration);
     } else if (isRunning && currentDuration < 0) {
       clearInterval(intervalId);
+      //this hack gets around a timer of the same duration getting skipped
+      setCurrentDuration(props.duration)
       props.onFinish(ID);
-      return;
+      //return;
     } else {
          
     }
