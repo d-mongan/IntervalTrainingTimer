@@ -1,5 +1,5 @@
 import { Button, StyleSheet, Text, TextInput, View, FlatList, Modal, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
-import { Picker, PickerItem } from 'react-native-picker';
+import ScrollPicker from 'react-native-wheel-scrollview-picker';
 import { useState, useCallback } from 'react';
 import IntervalItem from './Components/IntervalItem';
 import InputIntervalItem from './Components/InputIntervalItem';
@@ -41,12 +41,14 @@ function IntervalScreen({route, navigation}) {
   //for the seconds/minutes scrollwheel
   const secondsItems = [];
   for (let i = 0; i < 60; i++) {
-    secondsItems.push({label: i.toString().padStart(2, '0'), value: i});
+    //secondsItems.push({label: i.toString().padStart(2, '0'), value: i});
+    secondsItems.push(i);
   }
 
   const minutesItems = [];
   for (let i = 0; i < 60; i++) {
-    minutesItems.push({label: i.toString().padStart(2, '0'), value: i});
+    //minutesItems.push({label: i.toString().padStart(2, '0'), value: i});
+    minutesItems.push(i);
   }
 
   const renderItem = ({ item }) => {
@@ -101,6 +103,24 @@ function IntervalScreen({route, navigation}) {
         intervalsObject.intervals = updatedIntervals;
         saveData('IntervalTimers', IntervalTimers);
       }
+
+    function cancelNewItem(){
+
+      //close the modal
+      setModalVisible(false)
+      //reset variables used in the popup
+      setModalVisible(false)
+      setIntervalName('')
+      setIntervalDescription('')
+      setIntervalMinutes(0)
+      setIntervalSeconds(0)
+      setIntervalDuration('')
+      setIntervalColor('red')
+      setIntervalSound('')
+      setIntervalID('')
+      setIsRunning(false)
+
+    }
 
     function saveNewItem() {
         if (intervalID===''){
@@ -262,17 +282,74 @@ function IntervalScreen({route, navigation}) {
             </View>
             <Modal visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
                     <View style = {styles.modalContainer}>
-                        <Text>Name:</Text>
-                        <TextInput value={intervalName} onChangeText={(text) => setIntervalName(text)} />
-                        <Text>Description:</Text>
-                        <TextInput value={intervalDescription} onChangeText={(text) => setIntervalDescription(text)} />
-                        <Text>Duration:</Text>
+                        <Text style = {styles.heading}>Name:</Text>
+                        <TextInput  style = {styles.input} 
+                                    value={intervalName} 
+                                    onChangeText={(text) => setIntervalName(text)}
+                                    placeholder='Add Interval Name...'  />
+                        <Text style = {styles.heading}>Description:</Text>
+                        <TextInput  style = {styles.input} 
+                                    value={intervalDescription} 
+                                    onChangeText={(text) => setIntervalDescription(text)}
+                                    placeholder='Add Interval Description...' />
+                        <Text style = {styles.heading}>Duration:</Text>
                             <View style ={styles.timer}>
-                            
+                            <ScrollPicker
+                                dataSource={minutesItems}
+                                selectedIndex={intervalMinutes}
+                                renderItem={(data, index) => {
+                                  
+                                  
+                                    const isSelected = intervalMinutes === data;
+                                    const itemStyle = isSelected
+                                      ? styles.selectedItem
+                                      : styles.unselectedItem;
+                                    return (
+                                      <Text style={itemStyle}>
+                                        {data.toString().padStart(2, '0')}
+                                      </Text>
+                                    );
+                                }}
+                                onValueChange={(data, selectedIndex) => {
+                                  setIntervalMinutes(data)
+                                }}
+                                wrapperHeight={110}
+                                wrapperWidth={80}
+                                wrapperColor='#FFFFFF'
+                                itemHeight={60}
+                                highlightColor='#d8d8d8'
+                                highlightBorderWidth={2}
+                              />
+                              <Text style={{fontSize: 50, color: '#2D2A32', width: 60, paddingBottom:10, textAlign:'center'}}>:</Text>
+                              <ScrollPicker
+                                dataSource={secondsItems}
+                                selectedIndex={intervalSeconds}
+                                renderItem={(data, index) => {
+                                  
+                                  
+                                    const isSelected = intervalSeconds === data;
+                                    const itemStyle = isSelected
+                                      ? styles.selectedItem
+                                      : styles.unselectedItem;
+                                    return (
+                                      <Text style={itemStyle}>
+                                        {data.toString().padStart(2, '0')}
+                                      </Text>
+                                    );
+                                }}
+                                onValueChange={(data, selectedIndex) => {
+                                  setIntervalSeconds(data)
+                                }}
+                                wrapperHeight={110}
+                                wrapperWidth={60}
+                                wrapperColor='#FFFFFF'
+                                itemHeight={60}
+                                highlightColor='#d8d8d8'
+                                highlightBorderWidth={2}
+                              />
 
 
 
-                            
                             </View>
                             <View>
                               <TouchableOpacity onPress={toggleColorPicker}>
@@ -290,8 +367,15 @@ function IntervalScreen({route, navigation}) {
                                 </View>
                               )}
                             </View>
-
-                        <Button title="Save" onPress={saveNewItem} />
+                            <View style={styles.buttonRow}>
+                            <TouchableOpacity onPress={saveNewItem} style={styles.button}>
+                               <Text style={styles.buttonText}>Save</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={cancelNewItem} style={[styles.button,{ backgroundColor: '#BE97C6' }]}>
+                               <Text style={styles.buttonText}>Cancel</Text>
+                            </TouchableOpacity>
+                            </View>        
+                        
 
                     </View>
                 </Modal>
@@ -335,6 +419,45 @@ const styles = StyleSheet.create({
       flex: 6,
   
     },
+    heading:{
+      fontSize: 20, 
+      color: '#2D2A32', 
+      width: 180, 
+      marginBottom: 15,
+      fontWeight: 'bold',
+    },
+    input:{
+      fontSize: 20, 
+      color: '#2D2A32', 
+      padding: 8,
+      marginBottom: 15,
+      borderLeftWidth: 2,
+      borderRightWidth: 2,
+      borderRadius: 20,
+      borderColor: '#06D6A0'
+    },
+    buttonRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-evenly',
+      padding: 20,
+      marginTop: 80,
+      height: 100,
+      
+    },
+    button:{
+      backgroundColor: '#06D6A0',
+      width: 130,
+      Height: 100,
+      borderRadius: 30,
+      alignItems: 'center', // to align the text horizontally within the button
+      justifyContent: 'center', // to align the text vertically within the button
+      
+    },
+    buttonText: {
+      color: 'white',
+      fontWeight: 'bold',
+      fontSize: 20
+    },
     
     timer:{
         flexDirection: 'row',
@@ -344,7 +467,9 @@ const styles = StyleSheet.create({
         height: 180,
     },
     modalContainer:{
-
+      flex: 1,
+      
+      padding: 15,
     },
     colorBox: {
       width: 50,
