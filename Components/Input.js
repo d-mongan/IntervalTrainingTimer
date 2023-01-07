@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      justifyContent: 'space-evenly',
       alignItems: 'center',
       marginBottom: 24,
       borderBottomColor: '#cccccc',
@@ -54,6 +54,8 @@ const styles = StyleSheet.create({
       width: '70%',
       marginRight: 8,
       padding: 8,
+      backgroundColor: '#fff',
+      borderRadius: 10,
     },
     goalsContainer: {
       flex: 6,

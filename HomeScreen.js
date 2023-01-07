@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList, Alert } from 'react-native';
+import { StyleSheet, View, FlatList, Alert, ImageBackground } from 'react-native';
 import { useState, useEffect } from 'react';
 import Item from './Components/Item';
 import Input from './Components/Input';
@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 
 function HomeScreen({navigation}) {
     
+  const image = require('./assets/gradient.png');
+
   const [IntervalTimers, setIntervalTimers] = useState([])
   //check if IntervalTimers already exists and grab it from local storage
   const loadIntervalTimers = async () => {
@@ -62,6 +64,8 @@ function HomeScreen({navigation}) {
   }
 
   return (
+    <View style={styles.container}>
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
     <View style = {styles.appContainer}>
      <Input addTimer = {addTimerHandler} />
      <View style = {styles.timersContainer}>
@@ -81,16 +85,29 @@ function HomeScreen({navigation}) {
   
      </View>
     </View>
+    </ImageBackground>
+    </View>
   );
 } export default HomeScreen;
 
 
 
 const styles = StyleSheet.create({
+container: {
+  flex: 1,
+},
+
+  image:{
+    flex: 1,
+    justifyContent: "center"
+  },
+  
   appContainer: {
     paddingTop: 50,
     paddingHorizontal:16,
     flex: 1,
+    backgroundColor: 'transparent',
+    backgroundImage: require('./assets/gradient.png'),
   },
   inputContainer: {
     flexDirection: 'row',
@@ -100,6 +117,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#cccccc',
     borderBottomWidth: 1,
     flex: 1,
+    
   },
   textInput: {
     borderWidth: 1,
