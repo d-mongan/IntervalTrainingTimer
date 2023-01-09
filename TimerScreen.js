@@ -1,5 +1,5 @@
-import { Button, StyleSheet, Text, TextInput, View, TouchableOpacity, Image, Modal } from 'react-native';
-import { useState, useCallback } from 'react';
+import { Button, StyleSheet, Text, TextInput, View, TouchableOpacity, Image, Modal, ImageBackground } from 'react-native';
+import { useState, useCallback, useEffect  } from 'react';
 import { Timer } from './Components/Timer';
 import { useNavigation } from '@react-navigation/native';
 
@@ -25,12 +25,34 @@ function TimerScreen({route, navigation}) {
     const [minuteText, setMinutes] = useState('');
     const timers = route.params.intervals;
     const [currentTimerIndex, setCurrentTimerIndex] = useState(0);
-    const timer = timers[currentTimerIndex];
+    const [timer, setTimer] = useState(timers[currentTimerIndex]);
+    
+    //const timer = timers[currentTimerIndex];
+    useEffect(() => {
+      setTimer(timers[currentTimerIndex]);
+      //forceUpdate();
+    }, [currentTimerIndex]);
     //const [isRunning, setIsRunning] = useState(false);
-    console.log(timer);
+    
+    
+    //handle background gradients
+    const [backgroundImage, setBackgroundImage] = useState(require('./assets/grad_red.png'));
+    useEffect(() => {
+      if (timer.intervalColor == 'red') {
+        setBackgroundImage(require('./assets/grad_red.png'));
+      } else if (timer.intervalColor == 'orange') {
+        setBackgroundImage(require('./assets/grad_orange.png'));
+      } else if (timer.intervalColor == 'green') {
+        setBackgroundImage(require('./assets/grad_green.png'));
+      } else if (timer.intervalColor == 'blue') {
+        setBackgroundImage(require('./assets/grad_blue.png'));
+      } else if (timer.intervalColor == 'yellow') {
+        setBackgroundImage(require('./assets/grad_yellow.png'));
+      }
+    }, [timer.intervalColor]);
+
     //constant to change pause and play
     const [isImage1Displayed, setIsImage1Displayed] = useState(true);
-
     const image1 = require('./assets/PlayGrey.png');
     const image2 = require('./assets/Pause.png');
 
@@ -49,7 +71,7 @@ function TimerScreen({route, navigation}) {
 
     function handleTimerFinish(id) {
         //const nextTimerIndex = timers.findIndex(timer => timer.id === id) + 1;
-        console.log(timers.length)
+        
         const timer = timers[currentTimerIndex];
         timer.isRunning = false;
         let nextTimerIndex = currentTimerIndex+1;
@@ -73,6 +95,45 @@ function TimerScreen({route, navigation}) {
             setCurrentTimer(null);
               }*/
         }
+      }
+
+      function handleTimerNext(){
+        //const timer = timers[currentTimerIndex];
+        
+        let nextTimerIndex = currentTimerIndex+1;
+        if (nextTimerIndex < timers.length) {
+          if(!isImage1Displayed){
+            setIsImage1Displayed(true);
+          }
+            setCurrentTimerIndex(nextTimerIndex);
+            //const timer = timers[nextTimerIndex];
+            setTimer(timers[nextTimerIndex]);
+            timer.isRunning = false;
+            timer.intervalID = timers[nextTimerIndex].intervalID;
+            
+
+      } else {
+        resetTimers();
+      }
+    }
+      function handleTimerPrevious(){
+        //const timer = timers[currentTimerIndex];
+        
+        let prevTimerIndex = currentTimerIndex-1;
+        
+        if (prevTimerIndex >= 0) {
+          if(!isImage1Displayed){
+            setIsImage1Displayed(true);
+          }
+            setCurrentTimerIndex(prevTimerIndex);
+            //const timer = timers[prevTimerIndex];
+            setTimer(timers[prevTimerIndex]);
+            timer.isRunning = false;
+            forceUpdate();
+            
+      } else {
+        resetTimers();
+      }
       }
 
       function handlePauseTimers(){
@@ -99,7 +160,14 @@ function TimerScreen({route, navigation}) {
 
 
       return (
-        <View style={[styles.appContainer, { backgroundColor: timer.intervalColor }]}>
+        <View style={styles.appContainer}>
+        <ImageBackground source={backgroundImage} resizeMode="cover" style={styles.image}>
+        <TouchableOpacity onPress={resetTimers} style={{marginTop: 40, marginLeft: 15}}>
+            <Image
+                source={require('./assets/close.png')}
+                style={{ width: 30, height: 30 }}
+                />
+            </TouchableOpacity>
             <View style = {styles.titleBar}>
                 <Text style={{fontSize:50, }}>{timer.intervalName}</Text>
                 <Text style={{fontSize:30, }}>{timer.intervalDescription}</Text>
@@ -114,10 +182,11 @@ function TimerScreen({route, navigation}) {
                 color={timer.intervalColor}
                 onFinish={handleTimerFinish}
                 isRunning={timer.isRunning}
+                timer={timer}
                 />
             </View>
             <View style = {styles.controlBar}>
-            <TouchableOpacity onPress={resetTimers}>
+            <TouchableOpacity onPress={handleTimerPrevious}>
             <Image
                 source={require('./assets/Left.png')}
                 style={{ width: 60, height: 60 }}
@@ -129,7 +198,7 @@ function TimerScreen({route, navigation}) {
                 style={{ width: 100, height: 100 }}
                 />
             </TouchableOpacity>
-            <TouchableOpacity onPress={navigation.goBack}>
+            <TouchableOpacity onPress={handleTimerNext}>
             <Image
                 source={require('./assets/Right.png')}
                 style={{ width: 60, height: 60 }}
@@ -137,6 +206,7 @@ function TimerScreen({route, navigation}) {
             </TouchableOpacity>
 
             </View>
+            </ImageBackground>
         </View>
       )
 
@@ -144,11 +214,13 @@ function TimerScreen({route, navigation}) {
 
 const styles = StyleSheet.create({
 
-appContainer: {
+  appContainer: {
     flex: 1,
-    flexDirection: 'column',
-    
-},
+    justifyContent: 'center',
+  },
+  image: {
+    flex: 1,
+  },
 titleBar: {
     flex: 2,
     flexDirection: 'column',

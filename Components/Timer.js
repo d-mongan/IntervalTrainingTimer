@@ -5,14 +5,29 @@ import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
     export function Timer(props) {
   
+      
         const [currentDuration, setCurrentDuration] = useState(props.duration);
         const [minutes, setCurrentMinutes] = useState(Math.floor(currentDuration / 60).toString().padStart(2, '0'));
         const [seconds, setCurrentSeconds] = useState((currentDuration % 60).toString().padStart(2, '0'));
         const [ID, setCurrentID] = useState(props.id);
         const [isRunning, setIsRunning] = useState(props.isRunning);
-        //const [, updateState] = useState();
+        const [index, setCurrentIndex] = useState(props.index);
+        const [timer, setTimer] = useState(props.timer)
+       // const [, updateState] = useState();
         //const forceUpdate = useCallback(() => updateState({}), []);
-  
+
+        useEffect(() => {
+          setIsRunning(props.isRunning);
+        }, [props.isRunning]);
+      
+        useEffect(() => {
+          setCurrentDuration(props.duration);
+        }, [props.duration]);
+      
+        useEffect(() => {
+          setTimer(props.timer);
+          updateTimer();
+        }, [props.timer]);
 
   function updateDuration() {
     
@@ -20,6 +35,12 @@ import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
     setCurrentMinutes(Math.floor(currentDuration / 60).toString().padStart(2, '0'));
     setCurrentSeconds((currentDuration % 60).toString().padStart(2, '0'));
     
+  }
+  function updateTimer(){
+    setCurrentDuration(props.timer.intervalDuration);
+          setCurrentMinutes(Math.floor(props.timer.intervalDuration / 60).toString().padStart(2, '0'));
+          setCurrentSeconds((props.timer.intervalDuration % 60).toString().padStart(2, '0'));
+
   }
   let intervalId = null;
 
@@ -29,29 +50,20 @@ import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
       intervalId = setInterval(updateDuration, 1000);
       console.log(currentDuration);
     } else if (isRunning && currentDuration < 0) {
-      clearInterval(intervalId);
+      //clearInterval(intervalId);
       //this hack gets around a timer of the same duration getting skipped
-      setCurrentDuration(props.duration)
+      //setCurrentDuration(0)
       props.onFinish(ID);
       //return;
-    } else {
+    } else  {
+      //timer paused
          
     }
       
     return () => clearInterval(intervalId);
-  }, [isRunning, currentDuration, ID]);
+  }, [isRunning, currentDuration, timer]);
 
-  useEffect(() => {
-    setIsRunning(props.isRunning);
-  }, [props.isRunning]);
-
-  useEffect(() => {
-    setCurrentDuration(props.duration);
-  }, [props.duration]);
-
-  useEffect(() => {
-    setCurrentID(props.id);
-  }, [props.id]);
+  
 
   return (
     <View style = {timerStyles.timerBox}>
