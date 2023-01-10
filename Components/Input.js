@@ -44,7 +44,8 @@ const styles = StyleSheet.create({
       justifyContent: 'space-evenly',
       alignItems: 'center',
       marginBottom: 24,
-      borderBottomColor: '#cccccc',
+      paddingBottom: 24,
+      borderBottomColor: '#BE97C6',
       borderBottomWidth: 1,
       flex: 1,
     },
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
       padding: 8,
       backgroundColor: '#fff',
       borderRadius: 10,
+      height:45
     },
     goalsContainer: {
       flex: 6,

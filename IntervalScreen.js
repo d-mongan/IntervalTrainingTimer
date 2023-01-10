@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, TextInput, View, FlatList, Modal, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
+import { ImageBackground, StyleSheet, Text, TextInput, View, FlatList, Modal, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
 import { useState, useCallback } from 'react';
 import IntervalItem from './Components/IntervalItem';
@@ -9,31 +9,7 @@ import { saveData, loadData } from './Components/Storage';
 
 function IntervalScreen({route, navigation}) {
 
-  //old textinput for minutes/seconds:
-  /*<TextInput  maxLength={2} 
-                                            keyboardType="number-pad"  
-                                            value={intervalMinutes}
-                                            placeholder={intervalMinutes === 0 ? '00' : intervalMinutes.toString().padStart(2, '0')}
-                                    onChangeText={(text) => {
-                                        if (/^\d+$/.test(text) && Number(text) <= 59) {
-                                            setIntervalMinutes(Number(text));
-                                        }
-                                    }}
-                                style={{ width: 50, height: 50, fontSize:30 }}></TextInput>
-
-                                <Text style={{fontSize: 50, color: '#2D2A32', width: 30, paddingBottom:10}}>:</Text>
-                
-                                <TextInput  maxLength={2} 
-                                            keyboardType="number-pad"  
-                                            value={intervalSeconds}
-                                            placeholder={intervalSeconds === 0 ? '00' : intervalSeconds.toString().padStart(2, '0')}
-                                onChangeText={(text) => {
-                                        if (/^\d+$/.test(text) && Number(text) <= 59) {
-                                            setIntervalSeconds(Number(text));
-                                        }
-                                }}
-                                style={{ width: 50, height: 50, fontSize:30,  }}></TextInput>*/ 
-
+  
   //for the color picker
   const [colorPickerVisible, setColorPickerVisible] = useState(false);
   const Colors = ['red', 'orange', 'yellow', 'green', 'blue'];
@@ -317,7 +293,7 @@ function IntervalScreen({route, navigation}) {
                                 wrapperWidth={80}
                                 wrapperColor='#FFFFFF'
                                 itemHeight={60}
-                                highlightColor='#d8d8d8'
+                                highlightColor='#BE97C6'
                                 highlightBorderWidth={2}
                               />
                               <Text style={{fontSize: 50, color: '#2D2A32', width: 60, paddingBottom:10, textAlign:'center'}}>:</Text>
@@ -344,7 +320,7 @@ function IntervalScreen({route, navigation}) {
                                 wrapperWidth={60}
                                 wrapperColor='#FFFFFF'
                                 itemHeight={60}
-                                highlightColor='#d8d8d8'
+                                highlightColor='#BE97C6'
                                 highlightBorderWidth={2}
                               />
 
@@ -400,7 +376,7 @@ const styles = StyleSheet.create({
       flex: 0.5,
       flexDirection: 'row',
       marginBottom: 8,
-      borderBottomColor: '#cccccc',
+      borderBottomColor: '#BE97C6',
       borderBottomWidth: 1,
       paddingBottom: 8,
       
@@ -410,7 +386,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly',
         alignItems: 'center',
         marginBottom: 24,
-        borderBottomColor: '#cccccc',
+        borderBottomColor: '#BE97C6',
         borderBottomWidth: 1,
         paddingBottom: 8,
         flex: 0.75,
@@ -440,7 +416,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-evenly',
       padding: 20,
-      marginTop: 80,
+      marginTop: 60,
       height: 100,
       
     },
@@ -464,7 +440,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignContent: 'center',
         alignItems: 'center',
-        height: 180,
+        height: 110,
+        marginBottom: 30
+       
     },
     modalContainer:{
       flex: 1,

@@ -20,10 +20,16 @@ const styles = StyleSheet.create({
         padding: 10,
         paddingLeft: 20,
         margin: 6,
-        borderWidth: 1,
+        marginBottom: 10,
+        borderWidth: 0,
         borderColor: '#BE97C6',
         backgroundColor: '#fff',
-        borderRadius: 70,
+        borderRadius: 10,
+        shadowColor: 'black',
+      shadowOffset: { width: 0, height: 5 },
+      shadowOpacity: 0.9,
+      shadowRadius: 4,
+      elevation: 2
       },
 
 })

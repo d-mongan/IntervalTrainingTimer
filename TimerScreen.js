@@ -1,24 +1,10 @@
 import { Button, StyleSheet, Text, TextInput, View, TouchableOpacity, Image, Modal, ImageBackground } from 'react-native';
-import { useState, useCallback, useEffect  } from 'react';
+import { useState, useCallback, useEffect,    } from 'react';
 import { Timer } from './Components/Timer';
 import { useNavigation } from '@react-navigation/native';
 
-function TimerScreen({route, navigation}) {
-    /*list of props:
-                      onDelete = {removeTimerHandler}
-                      onPress = {openTimerHandler}
-                      name = {itemData.item.intervalName}
-                      id = {itemData.item.intervalID}
-                      description = {itemData.item.intervalDescription}
-                      duration = {itemData.item.intervalDuration}
-                      color = {itemData.item.intervalColor}
-                      sound = {itemData.item.intervalSound}
-                      intervals = {itemData.item.intervals} 
-                      isRunning = {itemData.item.isRunning}
-                      
-                      */
 
-    
+function TimerScreen({route, navigation}) {  
     const [, updateState] = useState();
     const forceUpdate = useCallback(() => updateState({}), []);
     const [secondText, setSeconds] = useState('');
@@ -27,12 +13,10 @@ function TimerScreen({route, navigation}) {
     const [currentTimerIndex, setCurrentTimerIndex] = useState(0);
     const [timer, setTimer] = useState(timers[currentTimerIndex]);
     
-    //const timer = timers[currentTimerIndex];
+    
     useEffect(() => {
       setTimer(timers[currentTimerIndex]);
-      //forceUpdate();
     }, [currentTimerIndex]);
-    //const [isRunning, setIsRunning] = useState(false);
     
     
     //handle background gradients
@@ -70,8 +54,6 @@ function TimerScreen({route, navigation}) {
     
 
     function handleTimerFinish(id) {
-        //const nextTimerIndex = timers.findIndex(timer => timer.id === id) + 1;
-        
         const timer = timers[currentTimerIndex];
         timer.isRunning = false;
         let nextTimerIndex = currentTimerIndex+1;
@@ -97,28 +79,21 @@ function TimerScreen({route, navigation}) {
         }
       }
 
-      function handleTimerNext(){
-        //const timer = timers[currentTimerIndex];
-        
+      function handleTimerNext(){ 
         let nextTimerIndex = currentTimerIndex+1;
         if (nextTimerIndex < timers.length) {
           if(!isImage1Displayed){
             setIsImage1Displayed(true);
           }
             setCurrentTimerIndex(nextTimerIndex);
-            //const timer = timers[nextTimerIndex];
             setTimer(timers[nextTimerIndex]);
-            timer.isRunning = false;
-            timer.intervalID = timers[nextTimerIndex].intervalID;
-            
+            timer.isRunning = false;          
 
       } else {
         resetTimers();
       }
     }
       function handleTimerPrevious(){
-        //const timer = timers[currentTimerIndex];
-        
         let prevTimerIndex = currentTimerIndex-1;
         
         if (prevTimerIndex >= 0) {
@@ -126,10 +101,8 @@ function TimerScreen({route, navigation}) {
             setIsImage1Displayed(true);
           }
             setCurrentTimerIndex(prevTimerIndex);
-            //const timer = timers[prevTimerIndex];
             setTimer(timers[prevTimerIndex]);
             timer.isRunning = false;
-            forceUpdate();
             
       } else {
         resetTimers();
@@ -151,10 +124,12 @@ function TimerScreen({route, navigation}) {
       }
       function resetTimers() {
         navigation.goBack();
+        
         //maybe try adding a 1 second wait here so the first timer doesn't flash?
         const timer = timers[currentTimerIndex];
         timer.isRunning = false;
-        setCurrentTimerIndex(0)
+        setCurrentTimerIndex(0);
+
         
     }
 

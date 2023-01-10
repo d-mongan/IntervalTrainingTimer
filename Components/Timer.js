@@ -1,6 +1,6 @@
 import { useState, useEffect, React, useCallback } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
-
+import { Audio } from 'expo-av';
 
 
     export function Timer(props) {
@@ -15,6 +15,22 @@ import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
         const [timer, setTimer] = useState(props.timer)
        // const [, updateState] = useState();
         //const forceUpdate = useCallback(() => updateState({}), []);
+
+        //sounds
+        
+        let warningSound = new Audio.Sound();
+        let intervalSound = new Audio.Sound();
+        let finalSound = new Audio.Sound();
+
+        async function playIntervalSound(){
+          let intervalSound = new Audio.Sound();
+          await intervalSound.loadAsync(require('../assets/intervalAlarm.wav'));
+          intervalSound.playAsync(1);
+        }
+        
+        playIntervalSound();
+
+        
 
         useEffect(() => {
           setIsRunning(props.isRunning);
@@ -53,6 +69,7 @@ import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
       //clearInterval(intervalId);
       //this hack gets around a timer of the same duration getting skipped
       //setCurrentDuration(0)
+      playIntervalSound();
       props.onFinish(ID);
       //return;
     } else  {
