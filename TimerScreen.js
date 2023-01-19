@@ -5,10 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import { Audio } from 'expo-av';
 
 function TimerScreen({route, navigation}) {  
-    const [, updateState] = useState();
-    const forceUpdate = useCallback(() => updateState({}), []);
-    const [secondText, setSeconds] = useState('');
-    const [minuteText, setMinutes] = useState('');
+    //const [, updateState] = useState();
+    //const forceUpdate = useCallback(() => updateState({}), []);
+    //const [secondText, setSeconds] = useState('');
+    //const [minuteText, setMinutes] = useState('');
     const timers = route.params.intervals;
     const [currentTimerIndex, setCurrentTimerIndex] = useState(0);
     const [timer, setTimer] = useState(timers[currentTimerIndex]);
@@ -117,14 +117,14 @@ function TimerScreen({route, navigation}) {
       function handlePauseTimers(){
         const timer = timers[currentTimerIndex];
         timer.isRunning = false;
-        forceUpdate();
+        //forceUpdate();
       }
     
       function startTimers() {
         // Start the timer at the current index
         const timer = timers[currentTimerIndex];
         timer.isRunning = true;
-        forceUpdate();
+        //forceUpdate();
         
       }
       function resetTimers() {

@@ -13,7 +13,7 @@ function HomeScreen({navigation}) {
   //check if IntervalTimers already exists and grab it from local storage
   const loadIntervalTimers = async () => {
     const data = await loadData('IntervalTimers');
-    if (data !== 'error'){
+    if (data !== null){
       setIntervalTimers(data);
     }
     

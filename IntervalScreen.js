@@ -2,7 +2,6 @@ import { ImageBackground, StyleSheet, Text, TextInput, View, FlatList, Modal, To
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
 import { useState, useCallback } from 'react';
 import IntervalItem from './Components/IntervalItem';
-import InputIntervalItem from './Components/InputIntervalItem';
 import { useNavigation } from '@react-navigation/native';
 import { saveData, loadData } from './Components/Storage';
 
@@ -27,22 +26,15 @@ function IntervalScreen({route, navigation}) {
     minutesItems.push(i);
   }
 
-  const renderItem = ({ item }) => {
-    return (
-      <Text style={[styles.item, item.value === intervalMinutes ? styles.selected : styles.faded]}>
-        {item.label}
-      </Text>
-    );
-  };
 
     //general arrays for the timers
-    const [, updateState] = useState();
-    const forceUpdate = useCallback(() => updateState({}), []);
+    //const [, updateState] = useState();
+    //const forceUpdate = useCallback(() => updateState({}), []);
     const { IntervalTimers, timerID } = route.params;
     const intervalsObject = IntervalTimers.find((timer) => timer.id === timerID);
     const [intervals, setIntervals] = useState(intervalsObject.intervals);
 
-    //const intervals = intervalsObject.intervals;
+    
 
     //grab the name, id and the array which holds the different intervals for this timer
     const name = intervalsObject.name;
