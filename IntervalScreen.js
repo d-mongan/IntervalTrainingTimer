@@ -185,7 +185,13 @@ function IntervalScreen({route, navigation}) {
 
       function startTimer() {
         //start the interval timer
-        navigation.navigate('Timer', { intervals: intervals});
+        
+        if (intervals.length > 0) {
+          navigation.navigate('Timer', { intervals: intervals});
+        } else {
+          //could show a warning telling the user to add an interval before trying to run the timer
+        }
+        
       }
 
       function toggleColorPicker() {
