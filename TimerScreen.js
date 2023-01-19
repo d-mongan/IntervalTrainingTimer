@@ -2,7 +2,7 @@ import { Button, StyleSheet, Text, TextInput, View, TouchableOpacity, Image, Mod
 import { useState, useCallback, useEffect,    } from 'react';
 import { Timer } from './Components/Timer';
 import { useNavigation } from '@react-navigation/native';
-
+import { Audio } from 'expo-av';
 
 function TimerScreen({route, navigation}) {  
     const [, updateState] = useState();
@@ -13,6 +13,17 @@ function TimerScreen({route, navigation}) {
     const [currentTimerIndex, setCurrentTimerIndex] = useState(0);
     const [timer, setTimer] = useState(timers[currentTimerIndex]);
     
+    //sounds    
+    async function playFinalSound(){
+      let finalSound = new Audio.Sound();
+      await finalSound.loadAsync(require('./assets/finalAlarm.mp3'));
+      finalSound.playAsync(1);
+    }
+    async function playIntervalSound(){
+      let intervalSound = new Audio.Sound();
+      await intervalSound.loadAsync(require('./assets/intervalAlarm.mp3'));
+      intervalSound.playAsync(1);
+    }
     
     useEffect(() => {
       setTimer(timers[currentTimerIndex]);
@@ -59,23 +70,17 @@ function TimerScreen({route, navigation}) {
         let nextTimerIndex = currentTimerIndex+1;
         
         if (nextTimerIndex < timers.length) {
-            setCurrentTimerIndex(nextTimerIndex);
+            playIntervalSound();
+            
+            setCurrentTimerIndex(nextTimerIndex)
             const timer = timers[nextTimerIndex];
-            forceUpdate();
+            //forceUpdate();
             timer.isRunning = true;
             
         } else {
             //code to play alert and then call a goBack function that resets variables, back button should also call that function
-            resetTimers();
-          /*Sound.createAsync(
-            {
-              uri:
-                'http://www.orangefreesounds.com/wp-content/uploads/2017/08/Alarm-clock-ringing-sound.mp3',
-              },
-              { shouldPlay: true });
-            setTimers([]);
-            setCurrentTimer(null);
-              }*/
+            //resetTimers();
+            playFinalSound();
         }
       }
 

@@ -17,21 +17,12 @@ import { Audio } from 'expo-av';
         //const forceUpdate = useCallback(() => updateState({}), []);
 
         //sounds
-        
-        let warningSound = new Audio.Sound();
-        let intervalSound = new Audio.Sound();
-        let finalSound = new Audio.Sound();
-
-        async function playIntervalSound(){
-          let intervalSound = new Audio.Sound();
-          await intervalSound.loadAsync(require('../assets/intervalAlarm.wav'));
-          intervalSound.playAsync(1);
+        async function playWarningSound(){
+          let warningSound = new Audio.Sound();
+          await warningSound.loadAsync(require('../assets/warningAlarm.wav'));
+          warningSound.playAsync(1);
         }
         
-        playIntervalSound();
-
-        
-
         useEffect(() => {
           setIsRunning(props.isRunning);
         }, [props.isRunning]);
@@ -64,12 +55,12 @@ import { Audio } from 'expo-av';
     //let intervalId = null;
     if (isRunning && currentDuration > -1) {
       intervalId = setInterval(updateDuration, 1000);
+      if(currentDuration < 3 && currentDuration > -1){
+        playWarningSound()
+      }
       console.log(currentDuration);
     } else if (isRunning && currentDuration < 0) {
-      //clearInterval(intervalId);
-      //this hack gets around a timer of the same duration getting skipped
-      //setCurrentDuration(0)
-      playIntervalSound();
+      
       props.onFinish(ID);
       //return;
     } else  {
