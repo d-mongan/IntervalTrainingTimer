@@ -1,5 +1,5 @@
-import { Button, StyleSheet, Text, TextInput, View, TouchableOpacity, Image, Modal, ImageBackground } from 'react-native';
-import { useState, useCallback, useEffect,    } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import { useState, useEffect,    } from 'react';
 import { Timer } from './Components/Timer';
 import { useNavigation } from '@react-navigation/native';
 import { Audio } from 'expo-av';

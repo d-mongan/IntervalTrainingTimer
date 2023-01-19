@@ -1,5 +1,5 @@
-import { useState, useEffect, React, useCallback } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import { useState, useEffect, React } from 'react';
+import { StyleSheet, Text, View} from 'react-native';
 import { Audio } from 'expo-av';
 
 

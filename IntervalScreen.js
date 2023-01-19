@@ -1,9 +1,9 @@
-import { ImageBackground, StyleSheet, Text, TextInput, View, FlatList, Modal, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
+import { StyleSheet, Text, TextInput, View, FlatList, Modal, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
 import ScrollPicker from 'react-native-wheel-scrollview-picker';
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import IntervalItem from './Components/IntervalItem';
 import { useNavigation } from '@react-navigation/native';
-import { saveData, loadData } from './Components/Storage';
+import { saveData } from './Components/Storage';
 
 
 function IntervalScreen({route, navigation}) {
